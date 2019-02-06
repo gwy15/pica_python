@@ -259,11 +259,11 @@ class PicaUser():
                     bar.update(bar.value)
 
                 bar.start()
-                with Pool() as pool:
+                with Pool(8) as pool:
                     pool.map(__do, pages)
                 bar.finish()
             else:
-                with Pool() as pool:
+                with Pool(8) as pool:
                     pool.map(_do, pages)
 
     @requirLogin
