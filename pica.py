@@ -127,7 +127,8 @@ class PicaUser():
                    proxies=self.proxies)
 
         # 状态码判断
-        assert res.status_code == 200
+        if not res.status_code == 200:
+            raise RuntimeError(res.json()['message'])
 
         # 判断 404
         try:
@@ -234,10 +235,15 @@ class PicaUser():
 
         def _do(page):
             media = page['media']
+            fn = os.path.join(pos, media['originalName'])
+            if os.path.exists(fn):
+                return
+
             data = self._getSinglePage(media['fileServer'],
                                        media['path'])
-            with open(os.path.join(pos, media['originalName']), 'wb') as f:
+            with open(fn + '.tmp', 'wb') as f:
                 f.write(data)
+            os.rename(fn + '.tmp', fn)
 
         if threaded:
             for page in pages:
