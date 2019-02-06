@@ -10,6 +10,7 @@ from typing import List
 from multiprocessing.dummy import Pool
 
 import requests
+import progressbar
 
 
 SECRET_KEY = "~n}$S9$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr"
@@ -228,7 +229,6 @@ class PicaUser():
             f'下载整话，漫画 {comic} 第 {order} 话，下载位置 {pos}，多线程 {threaded}')
         assert order <= comic.epsCount
         pages = self.getComicEpisodePages(comic, order)
-        pages = wrap(pages) if wrap else pages
 
         if not os.path.exists(pos):
             os.mkdir(pos)
@@ -245,12 +245,26 @@ class PicaUser():
                 f.write(data)
             os.rename(fn + '.tmp', fn)
 
-        if threaded:
+        if not threaded:
+            pages = wrap(pages) if wrap else pages
             for page in pages:
                 _do(page)
         else:
-            with Pool() as pool:
-                pool.map(_do, pages)
+            if wrap:
+                bar = progressbar.ProgressBar(max_value=len(pages))
+
+                def __do(page):
+                    _do(page)
+                    bar.value += 1
+                    bar.update(bar.value)
+
+                bar.start()
+                with Pool() as pool:
+                    pool.map(__do, pages)
+                bar.finish()
+            else:
+                with Pool() as pool:
+                    pool.map(_do, pages)
 
     @requirLogin
     def _getSinglePage(self, filesever, path):
