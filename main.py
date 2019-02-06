@@ -1,8 +1,9 @@
 import os
+import getpass
+import argparse
+
 from pica import PicaUser
 from progressbar import progressbar
-
-import argparse
 
 
 def getUser():
@@ -12,7 +13,7 @@ def getUser():
         user = PicaUser(token)
     else:
         user = PicaUser()
-        user.signin(input('用户名: '), input('密码: '))
+        user.signin(input('用户名: '), getpass.getpass('密码: '))
         with open('token.txt', 'w') as f:
             f.write(user.token)
     return user
