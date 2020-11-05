@@ -13,7 +13,7 @@ import requests
 import progressbar
 
 
-SECRET_KEY = "~n}$S9$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr"
+SECRET_KEY = "~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
 BASE_URL = "https://picaapi.picacomic.com/"
 
 S_UUID = str(uuid.uuid4()).replace("-", "")
@@ -68,16 +68,16 @@ class PicaUser():
         self.headers = {
             "api-key": API_KEY,
             "accept": "application/vnd.picacomic.com.v1+json",
-            "app-channel": "3",
+            "app-channel": "2",
             "time": "0",
             "nonce": S_UUID,
-            "signature": "0",
-            "app-version": "2.1.0.4",
-            "app-uuid": "418e56fb-60fb-352b-8fca-c6e8f0737ce6",
+            "signature": "encrypt",
+            "app-version": "2.2.1.2.3.3",
+            "app-uuid": "defaultUuid",
             "app-platform": "android",
             "Content-Type": "application/json; charset=UTF-8",
             "User-Agent": "okhttp/3.8.1",
-            "app-build-version": "39"}
+            "app-build-version": "44"}
         self.token = token
         self.headers["authorization"] = token
         self.proxies = proxies
